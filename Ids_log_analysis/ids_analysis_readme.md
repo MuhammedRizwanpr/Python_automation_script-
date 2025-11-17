@@ -101,7 +101,7 @@ The script will display:
 
 ```
 # Example placeholder:
-![IDS Analysis Output](./screenshot.png)
+![IDS Analysis Output](.screenshot/ids_log_analysis.png)
 ```
 
 ---
