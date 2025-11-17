@@ -90,9 +90,8 @@ This scanner is helpful for:
 *(You can add your screenshot here)*
 
 Example placeholder:
-```
-![Network Scan Result](images/sample_output.png)
-```
+
+![Network Scan Result](/screenshot/arp_scanning.png)
 
 ---
 
