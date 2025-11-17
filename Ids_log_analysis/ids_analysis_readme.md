@@ -99,10 +99,10 @@ The script will display:
 
 (Place your screenshot here)
 
-```
+
 # Example placeholder:
 ![IDS Analysis Output](screenshot/ids_log_analysis.png)
-```
+
 
 ---
 
