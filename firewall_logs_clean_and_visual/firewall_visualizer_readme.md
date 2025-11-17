@@ -132,11 +132,10 @@ python3 firewall_clean_and_visualize.py
 
 Add a screenshot of your tool running:
 
-```
-![Firewall Tool Output](./screenshot.png)
-```
-
----
+![Firewall Tool Output](/screenshot/vistual1.png)
+![Firewall Tool Output](/screenshot/vistual2.png)
+![Firewall Tool Output](/screenshot/vistual3.png)
+![Firewall Tool Output](/screenshot/vistual4.png)
 
 ## 📝 Notes
 
