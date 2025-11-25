@@ -3,44 +3,22 @@ import numpy as np
 import re
 import matplotlib.pyplot as plt
 
-# ==========================================================
-# 1. LOAD DIRTY FIREWALL LOG
-# ==========================================================
 df = pd.read_csv("dirty_logs.csv")
 print("===== RAW DIRTY LOG =====")
 print(df)
 
-# ==========================================================
-# 2. STRIP SPACES FROM ALL TEXT COLUMNS
-# ==========================================================
 df = df.apply(lambda col: col.str.strip() if col.dtype == "object" else col)
-
-# ==========================================================
-# 3. FIX TIMESTAMPS (INVALID → NaT)
-# ==========================================================
 df['timestamp'] = pd.to_datetime(df['timestamp'], errors='coerce')
-df = df.dropna(subset=['timestamp'])   # remove rows with invalid timestamp
+df = df.dropna(subset=['timestamp']) 
 
-# ==========================================================
-# 4. LOWERCASE action, severity, message
-# ==========================================================
 df['action'] = df['action'].str.lower()
 df['severity'] = df['severity'].str.lower()
 df['message'] = df['message'].str.lower()
 
-# ==========================================================
-# 5. REMOVE DUPLICATE ROWS
-# ==========================================================
 df = df.drop_duplicates()
 
-# ==========================================================
-# 6. REMOVE ROWS WITH MISSING CRITICAL FIELDS
-# ==========================================================
 df = df.dropna(subset=['src_ip', 'dst_ip'])
 
-# ==========================================================
-# 7. VALIDATE IP ADDRESSES
-# ==========================================================
 def is_valid_ip(ip):
     pattern = r'\b\d{1,3}(?:\.\d{1,3}){3}\b'
     if not re.match(pattern, ip):
@@ -51,39 +29,19 @@ def is_valid_ip(ip):
 df = df[df['src_ip'].apply(is_valid_ip)]
 df = df[df['dst_ip'].apply(is_valid_ip)]
 
-# ==========================================================
-# 8. FIX MULTIPLE SPACES IN MESSAGE
-# ==========================================================
 df['message'] = df['message'].str.replace(r'\s+', ' ', regex=True)
 
-# ==========================================================
-# 9. REMOVE EMPTY ACTION VALUES
-# ==========================================================
 df = df[df['action'].str.strip() != ""]
 
-# ==========================================================
-# 10. FILL ANY REMAINING EMPTY CELLS
-# ==========================================================
 df = df.fillna("unknown")
 
-# ==========================================================
-# 11. SORT BY TIME
-# ==========================================================
 df = df.sort_values(by='timestamp')
 
 print("\n===== CLEANED FIREWALL LOG =====")
 print(df)
 
-# Save cleaned file
-# df.to_csv("clean_firewall_log.csv", index=False)
-
-# ==========================================================
 # ---------- VISUALIZATIONS ----------
-# ==========================================================
 
-# ==========================================================
-# 12. VISUALIZE: ATTACK COUNT PER SOURCE IP
-# ==========================================================
 plt.figure(figsize=(10,4))
 df['src_ip'].value_counts().plot(kind='bar')
 plt.yticks(range(0,5))
@@ -93,9 +51,6 @@ plt.ylabel("Number of Attacks")
 plt.tight_layout()
 plt.show()
 
-# ==========================================================
-# 13. VISUALIZE: SEVERITY LEVELS (high/medium/low)
-# ==========================================================
 plt.figure(figsize=(6,4))
 df['severity'].value_counts().plot(kind='bar')
 plt.title("Severity Distribution")
@@ -104,9 +59,6 @@ plt.ylabel("Count")
 plt.tight_layout()
 plt.show()
 
-# ==========================================================
-# 14. VISUALIZE: ACTIONS (allowed / blocked)
-# ==========================================================
 plt.figure(figsize=(6,4))
 df['action'].value_counts().plot(kind='bar')
 plt.title("Firewall Action Summary")
@@ -115,9 +67,6 @@ plt.ylabel("Count")
 plt.tight_layout()
 plt.show()
 
-# ==========================================================
-# 15. VISUALIZE: ATTACKS OVER TIME
-# ==========================================================
 plt.figure(figsize=(12,4))
 df.set_index('timestamp')['src_ip'].resample('1T').count().plot()
 plt.title("Firewall Events Over Time (per minute)")
