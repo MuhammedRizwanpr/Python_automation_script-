@@ -39,9 +39,6 @@ df = df.sort_values(by='timestamp')
 
 print("\n===== CLEANED FIREWALL LOG =====")
 print(df)
-
-# ---------- VISUALIZATIONS ----------
-
 plt.figure(figsize=(10,4))
 df['src_ip'].value_counts().plot(kind='bar')
 plt.yticks(range(0,5))
